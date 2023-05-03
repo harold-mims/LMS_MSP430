@@ -150,10 +150,9 @@
 volatile unsigned char RXData = 0;
 volatile unsigned char TXData = 1;
 
-
-
 unsigned int blinkFreq = 5000;
 unsigned int blinkMultiplier = 50;
+
 
 int main(void)
 {
@@ -187,13 +186,14 @@ int main(void)
             P5OUT ^= BIT0;                      // Toggle P1.0 using exclusive-OR
 
 
-            //i = 156 - (blinkMultiplier) + 1;
+            //i= 156 - (blinkMultiplier) + 1;
             i = 130 - (blinkMultiplier) + 1;
             //i = 5000 - (50 * blinkMultiplier) + 1;
             //i = 500 - (5 * blinkMultiplier) + 1;
-            i_max = i;
+            //i_max = i;
             do i--;
             while(i != 0);
+
         }
     }
 }
