@@ -61,8 +61,8 @@
 //            |                 |
 //            |                 |
 //            |                 |
-//            |    P4.1/LimitSwi|----> Swi --> gnd
 //            |    P4.2/LimitSwi|----> Swi --> gnd
+//            |    P4.3/LimitSwi|----> Swi --> gnd
 //            |                 |
 //            |                 |
 //            |             P1.0|---> LED
@@ -174,7 +174,7 @@ int main(void)
         if (blinkMultiplier < 1) {
             P1OUT &= ~0x01;
             P5OUT &= ~BIT0;
-            //P3OUT &= (BIT6);    // Sets ENABLE to 0 disabling the motor
+            //P3OUT &= ~(BIT6);    // Sets ENABLE to 0 disabling the motor
         }
 
         else {
@@ -187,8 +187,8 @@ int main(void)
             P5OUT ^= BIT0;                      // Toggle P1.0 using exclusive-OR
 
 
-            i = 156 - (blinkMultiplier) + 1;
-            //i = 110 - (blinkMultiplier) + 1;
+            //i = 156 - (blinkMultiplier) + 1;
+            i = 130 - (blinkMultiplier) + 1;
             //i = 5000 - (50 * blinkMultiplier) + 1;
             //i = 500 - (5 * blinkMultiplier) + 1;
             i_max = i;
@@ -252,8 +252,27 @@ void __attribute__ ((interrupt(EUSCI_A3_VECTOR))) USCI_A3_ISR (void)
             switch(rxResponse[rx_i]){
                 case 0x00:
                     //UCA3TXBUF = UCA3RXBUF;
+                    /*
                     if(rxResponse[0] == 'R'){
                         blinkMultiplier = set_blink_rate(&rxResponse[1]);
+                    }*/
+
+                    switch(rxResponse[0]) {
+                        case 'R':
+                            blinkMultiplier = set_blink_rate(&rxResponse[1]);
+                            break;
+                        case 'C':
+                            if(rxResponse[1] == 't'){
+                                P3OUT |= (BIT7);    // Sets Sleep to 1 enabling the motor
+                                //P1OUT |= BIT1;
+
+                            }
+                            else if(rxResponse[1] == 'f') {
+                                P3OUT &= ~(BIT7);    // Sets Sleep to 0 disabling the motor
+                                //P1OUT &= ~BIT1;
+
+                            }
+
                     }
 
                     // Act on Final Char

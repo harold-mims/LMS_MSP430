@@ -82,7 +82,7 @@ void init_DRV8424EVM(){
     P3OUT |= (BIT2);    // TOFF
 
     // Set Operating Mode
-    P3OUT |= (BIT7);   // nSleep
+    P3OUT &= ~(BIT7);   // nSleep
     P3OUT |= (BIT6);    // ENABLE
 
 }
